@@ -4,6 +4,6 @@
   "private": true,
   "description": "Static site for AlexAI Resume Help. No dependencies and no build step.",
   "scripts": {
-    "test": "node --test tests/analyzer.test.js tests/site.test.js"
+    "test": "node --test tests/analyzer.test.js tests/letter.test.js tests/links.test.js tests/site.test.js"
   }
 }

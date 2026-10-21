@@ -12,7 +12,10 @@ const ROOT = path.resolve(__dirname, '..');
 const STRIPE = 'https://buy.stripe.com/5kQbJ16Ji658d806uQg3601';
 const REFUND = 'If I cannot deliver a usable pack, you get a full refund.';
 const PLACEHOLDER = '%%BASE_URL%%';
-const ALLOWED_EXTERNAL = [STRIPE, 'https://stripe.com/privacy', 'https://owl.purdue.edu/'];
+const BASE = 'https://areden5356.github.io/alexai-resume-help';
+const STRIPE_LI = 'https://buy.stripe.com/3cI6oH7Nm79c6JC2eAg3602';
+const STRIPE_CL = 'https://buy.stripe.com/14AbJ1ffObpsd8006sg3603';
+const ALLOWED_EXTERNAL = [STRIPE, STRIPE_LI, STRIPE_CL, 'https://stripe.com/privacy', 'https://owl.purdue.edu/', BASE];
 
 function walk(dir, out = []) {
   for (const name of fs.readdirSync(dir)) {
@@ -44,8 +47,13 @@ const indexable = pages.filter((p) => p.name !== '404.html');
 test('the expected pages exist', () => {
   const names = pages.map((p) => p.name).sort();
   assert.deepEqual(names, [
-    '404.html', 'ats-check/index.html', 'guides/achievement-bullets-from-duties.html', 'guides/common-resume-mistakes.html',
-    'guides/cover-letter-structure.html', 'guides/index.html', 'guides/resume-formatting-that-parses-cleanly.html',
+    '404.html', 'ats-check/index.html', 'cover-letter-check/index.html',
+    'guides/achievement-bullets-from-duties.html', 'guides/career-change-resume-with-only-your-facts.html',
+    'guides/common-resume-mistakes.html', 'guides/cover-letter-structure.html',
+    'guides/follow-up-after-applying-without-being-pushy.html', 'guides/how-many-bullets-per-job-on-a-resume.html',
+    'guides/index.html', 'guides/projects-and-coursework-on-a-resume.html',
+    'guides/reference-and-employment-gap-questions-answered-honestly.html',
+    'guides/resume-formatting-that-parses-cleanly.html', 'guides/resume-summary-vs-objective-for-students.html',
     'guides/tailor-resume-to-job-posting.html', 'index.html', 'privacy.html', 'terms.html'
   ]);
 });
@@ -68,11 +76,11 @@ test('every page has lang, viewport, a unique title and a unique description', (
   console.log('    pages checked:', pages.length);
 });
 
-test('canonical tags use the placeholder and the right path; Open Graph is present', () => {
+test('canonical tags use the published base URL and the right path; Open Graph is present', () => {
   const expected = (name) => name === 'index.html' ? '/' : name.endsWith('/index.html') ? '/' + name.replace('index.html', '') : '/' + name;
   for (const p of pages) {
     const c = (p.html.match(/<link rel="canonical" href="([^"]+)">/) || [])[1];
-    assert.equal(c, PLACEHOLDER + expected(p.name), p.name);
+    assert.equal(c, BASE + expected(p.name), p.name);
     if (p.name !== '404.html') {
       assert.match(p.html, /<meta property="og:title" content="[^"]+">/, p.name);
       assert.match(p.html, /<meta property="og:description" content="[^"]+">/, p.name);
@@ -122,13 +130,14 @@ test('internal links and assets resolve, relative, with valid anchors', () => {
   assert.ok(checked > 100);
 });
 
-test('the Stripe link is present exactly, and no other Stripe URL exists', () => {
+test('the $39 Stripe link is present exactly; only the two approved secondary offers add other Stripe URLs', () => {
   const home = read(path.join(ROOT, 'index.html'));
   const count = home.split(STRIPE).length - 1;
   assert.ok(count >= 3, 'expected at least 3 pay links on the landing page, found ' + count);
   for (const f of textFiles) {
     for (const m of read(f).matchAll(/https?:\/\/buy\.stripe\.com\/[^\s"'<)]*/g)) {
-      assert.equal(m[0], STRIPE, rel(f));
+      assert.ok([STRIPE, STRIPE_LI, STRIPE_CL].includes(m[0]), rel(f) + ' has an unapproved Stripe URL ' + m[0]);
+      if (m[0] !== STRIPE) assert.equal(rel(f), 'index.html', 'secondary offers belong on the landing page only');
     }
   }
   assert.match(home, /<a class="btn" href="https:\/\/buy\.stripe\.com\/5kQbJ16Ji658d806uQg3601">Pay \$39 with Stripe<\/a>/);
@@ -152,23 +161,27 @@ test('the only external hosts are Stripe and Purdue, all as plain links; nothing
   assert.ok(!/@import|url\(\s*["']?https?:/.test(read(path.join(ROOT, 'assets', 'style.css'))));
 });
 
-test('the base URL placeholder appears only in canonical tags, sitemap.xml and robots.txt', () => {
+test('the unpublished placeholder is gone, and the base URL appears only in canonical tags, sitemap.xml and robots.txt', () => {
   for (const f of textFiles.filter((x) => !x.endsWith('.py'))) {
     let text = read(f);
+    assert.ok(!text.includes(PLACEHOLDER), rel(f) + ' still has the placeholder');
     if (f.endsWith('.html')) text = text.replace(/<link rel="canonical" href="[^"]*">/g, '');
-    if (['sitemap.xml', 'robots.txt'].includes(rel(f))) { assert.ok(text.includes(PLACEHOLDER), rel(f)); continue; }
-    assert.ok(!text.includes(PLACEHOLDER), rel(f) + ' has a stray placeholder');
+    if (['sitemap.xml', 'robots.txt'].includes(rel(f))) { assert.ok(text.includes(BASE), rel(f)); continue; }
+    assert.ok(!text.includes(BASE), rel(f) + ' hard-codes the base URL outside canonical tags');
   }
 });
 
 test('sitemap lists every page except the 404 and points at files that exist', () => {
   const xml = read(path.join(ROOT, 'sitemap.xml'));
-  const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].replace(PLACEHOLDER, ''));
+  const rawLocs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+  rawLocs.forEach((l) => assert.ok(l.startsWith(BASE + '/'), 'sitemap entry outside the base URL: ' + l));
+  const locs = rawLocs.map((l) => l.slice(BASE.length));
   const toFile = (l) => (l === '/' ? 'index.html' : l.endsWith('/') ? l.slice(1) + 'index.html' : l.slice(1));
   const listed = locs.map(toFile).sort();
   listed.forEach((f) => assert.ok(fs.existsSync(path.join(ROOT, f)), 'sitemap points to missing ' + f));
+  assert.equal(new Set(listed).size, listed.length, 'duplicate sitemap entries');
   assert.deepEqual(listed, indexable.map((p) => p.name).sort());
-  assert.match(read(path.join(ROOT, 'robots.txt')), /^Sitemap: %%BASE_URL%%\/sitemap\.xml$/m);
+  assert.equal(read(path.join(ROOT, 'robots.txt')).match(/^Sitemap: (.+)$/m)[1], BASE + '/sitemap.xml');
   console.log('    sitemap entries:', locs.length);
 });
 
@@ -274,6 +287,8 @@ test('no cookies, storage, tracking or network calls in any script', () => {
   const tool = read(path.join(ROOT, 'ats-check', 'index.html'));
   const srcs = [...tool.matchAll(/<script src="([^"]+)"/g)].map((m) => m[1]);
   assert.deepEqual(srcs, ['../assets/site.js', 'analyzer.js', 'tool.js']);
+  const letter = read(path.join(ROOT, 'cover-letter-check', 'index.html'));
+  assert.deepEqual([...letter.matchAll(/<script src="([^"]+)"/g)].map((m) => m[1]), ['../assets/site.js', 'checker.js', 'tool.js']);
   console.log('    scripts scanned:', scripts.length);
 });
 
@@ -297,16 +312,19 @@ test('FAQ JSON-LD matches the visible FAQ word for word; Service JSON-LD matches
   console.log('    FAQ entries matched:', details.length);
 });
 
-test('guides: 5 pages, each 700 to 1200 words, each with a hub link and sources only from Purdue', () => {
+test('guides: 11 pages, each 700 to 1200 words (the six added later 700 to 1100), each with a hub link and sources only from Purdue', () => {
   const guides = pages.filter((p) => /^guides\/(?!index)/.test(p.name));
-  assert.equal(guides.length, 5);
+  assert.equal(guides.length, 11);
+  const added = ['resume-summary-vs-objective-for-students', 'how-many-bullets-per-job-on-a-resume', 'career-change-resume-with-only-your-facts',
+    'projects-and-coursework-on-a-resume', 'reference-and-employment-gap-questions-answered-honestly', 'follow-up-after-applying-without-being-pushy'];
   for (const g of guides) {
     const article = g.html.match(/<article[\s\S]*?<\/article>/)[0];
     const words = visibleText(article).split(' ').length;
     console.log('    ' + g.name + ': ' + words + ' words');
-    assert.ok(words >= 700 && words <= 1200, g.name + ' has ' + words + ' words');
+    const max = added.some((a) => g.name === 'guides/' + a + '.html') ? 1100 : 1200;
+    assert.ok(words >= 700 && words <= max, g.name + ' has ' + words + ' words');
     assert.match(g.html, /href="index\.html"/);
-    for (const m of g.html.matchAll(/href="(https?:[^"]+)"/g)) {
+    for (const m of g.html.replace(/<link rel="canonical"[^>]*>/, '').matchAll(/href="(https?:[^"]+)"/g)) {
       if (m[1] !== STRIPE) assert.ok(m[1].startsWith('https://owl.purdue.edu/owl/job_search_writing/'), g.name + ' ' + m[1]);
     }
   }
@@ -351,6 +369,10 @@ test('set_base_url.py replaces the placeholder, refuses bad input, and can swap 
     }
   };
   copy(ROOT, tmp);
+  // the repo is already published, so rebuild the pre-publish state in the temp copy
+  for (const f of walk(tmp).filter((x) => /\.(html|xml|txt)$/.test(x))) {
+    fs.writeFileSync(f, fs.readFileSync(f, 'utf8').split(BASE).join(PLACEHOLDER));
+  }
   const run = (...args) => spawnSync('python', [path.join(tmp, 'set_base_url.py'), ...args], { encoding: 'utf8' });
 
   assert.equal(run('ftp://nope').status, 2);
@@ -362,7 +384,7 @@ test('set_base_url.py replaces the placeholder, refuses bad input, and can swap 
   const ok = run('https://u.github.io/alexai-resume-help/');
   assert.equal(ok.status, 0, ok.stderr);
   console.log('    ' + ok.stdout.trim().split('\n').pop());
-  for (const f of walk(tmp)) assert.ok(!fs.readFileSync(f, 'utf8').replace(/PLACEHOLDER = "%%BASE_URL%%"/, '').includes(PLACEHOLDER) || /\.(py|md)$/.test(f), f);
+  for (const f of walk(tmp)) assert.ok(!fs.readFileSync(f, 'utf8').includes(PLACEHOLDER) || /\.(py|md)$/.test(f), f);
   assert.match(fs.readFileSync(path.join(tmp, 'sitemap.xml'), 'utf8'), /<loc>https:\/\/u\.github\.io\/alexai-resume-help\/ats-check\/<\/loc>/);
   assert.match(fs.readFileSync(path.join(tmp, 'index.html'), 'utf8'), /<link rel="canonical" href="https:\/\/u\.github\.io\/alexai-resume-help\/">/);
   assert.match(fs.readFileSync(path.join(tmp, 'robots.txt'), 'utf8'), /Sitemap: https:\/\/u\.github\.io\/alexai-resume-help\/sitemap\.xml/);

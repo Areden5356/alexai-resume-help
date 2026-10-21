@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free cover letter check against a job posting</title>
+<meta name="description" content="Paste a cover letter and the posting. Check length, whether it names the employer and role, a generic opening, overlap with the posting, repeats and passive voice.">
+<link rel="canonical" href="https://areden5356.github.io/alexai-resume-help/cover-letter-check/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AlexAI Resume Help">
+<meta property="og:title" content="Free cover letter check against a job posting">
+<meta property="og:description" content="Paste a cover letter and a posting. Nine plain checks, each explained and labelled as a heuristic. Nothing is uploaded.">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href="../index.html"><span class="brand-mark">AlexAI</span><span class="brand-sub">Resume Help</span></a>
+    <nav aria-label="Main">
+      <a href="../ats-check/index.html">Free keyword check</a>
+      <a href="index.html" aria-current="page">Free letter check</a>
+      <a href="../guides/index.html">Guides</a>
+      <a class="btn btn-small" href="../index.html#paid">Paid help</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap article">
+  <p class="crumbs"><a href="../index.html">Home</a> / Free cover letter check</p>
+  <h1>Check your cover letter against a job posting</h1>
+  <p class="lede">Paste your letter and the posting, tell the tool the employer and the role, and get nine plain checks. It is free.</p>
+  <p class="privacy-line"><strong>Nothing is uploaded or stored.</strong> The checks run in this page, in your browser. Your text is not sent to a server, not saved, and not logged, and this site sets no cookies. Close the tab and it is gone.</p>
+
+  <noscript><p class="error">This tool needs JavaScript. Turn it on for this page and reload.</p></noscript>
+
+  <div class="tool-grid">
+    <div>
+      <label class="field" for="employer">Employer name</label>
+      <input type="text" id="employer" autocomplete="off" spellcheck="false" maxlength="120" placeholder="As the posting writes it">
+    </div>
+    <div>
+      <label class="field" for="role">Role title</label>
+      <input type="text" id="role" autocomplete="off" spellcheck="false" maxlength="120" placeholder="As the posting writes it">
+    </div>
+  </div>
+
+  <div class="tool-grid">
+    <div>
+      <label class="field" for="letter">Your cover letter (plain text)</label>
+      <textarea id="letter" spellcheck="false" placeholder="Paste the whole letter, greeting and sign-off included"></textarea>
+      <p class="hint">At least 40 words. Put a blank line between paragraphs.</p>
+    </div>
+    <div>
+      <label class="field" for="posting">The job posting</label>
+      <textarea id="posting" spellcheck="false" placeholder="Paste the full posting, including the requirements"></textarea>
+      <p class="hint">At least 40 words.</p>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn" type="button" id="run">Check the letter</button>
+    <button class="btn btn-quiet" type="button" id="sample">Try it with a made-up example</button>
+    <button class="btn btn-quiet" type="button" id="clear">Clear</button>
+  </div>
+  <p class="error" id="error" role="alert"></p>
+
+  <div class="results" id="results" aria-live="polite" hidden></div>
+
+  <h2>What this is, and what it is not</h2>
+  <div class="prose">
+    <p>This is a set of nine fixed rules run over text you paste. Each one is a heuristic: a pattern or a count with a cutoff I chose for ordinary one page letters. Each result has a short explanation of exactly what the rule looks at, under "How this rule works".</p>
+    <p>It does not judge whether your letter is good. It cannot know what the hiring manager values, whether your stories are strong, or whether a flagged phrase is fine in your letter. A letter can pass every check and still be forgettable, and a letter can trip a few and still be the right one. Use the results as a list of places to reread.</p>
+    <p>It also does not simulate an applicant tracking system. Cover letters are often not scored by software at all, and nobody outside an employer can say how theirs treats a letter.</p>
+
+    <h3>The nine checks</h3>
+    <ul>
+      <li><strong>Length.</strong> Words in the body, and your longest paragraph.</li>
+      <li><strong>Names the employer.</strong> Whether the name you typed appears in the letter.</li>
+      <li><strong>Names the role.</strong> Whether the title you typed appears, whole or in part.</li>
+      <li><strong>Opening line.</strong> The first sentence, against a short list of stock openers, and whether it names the employer or role.</li>
+      <li><strong>Template leftovers.</strong> Square brackets, curly braces and "company name" style placeholders.</li>
+      <li><strong>Overlap with the posting.</strong> Which of the posting's repeated words your letter uses.</li>
+      <li><strong>Repeated words.</strong> Everyday content words used four or more times.</li>
+      <li><strong>Repeated sentence openers.</strong> The same first word starting three or more sentences.</li>
+      <li><strong>Passive voice indicators.</strong> A form of "to be" followed by a past participle.</li>
+    </ul>
+    <p class="small">Known limits: greeting and sign-off are found by simple patterns. Sentence splitting is approximate. The passive voice rule misses some passives and flags a few adjectives. Overlap counts single words only. The stock opener list is short and in English. For the structure of a letter, see <a href="../guides/cover-letter-structure.html">the cover letter guide</a>. To compare a resume with the same posting, use the <a href="../ats-check/index.html">free keyword check</a>.</p>
+  </div>
+
+  <div class="cta-box">
+    <h2>Want help writing it instead?</h2>
+    <p>If you would rather hand it off, I write a cover letter for one posting from facts you give me, drafted with AI and reviewed by me. It is a paid option and you do not need it to use this tool.</p>
+    <p><a href="../index.html#paid">See the paid options</a></p>
+  </div>
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap cols">
+    <div>
+      <h2>AlexAI Resume Help</h2>
+      <p>A one-person resume service. Drafts are written with AI and reviewed by a person before they reach you.</p>
+      <p>Questions: <span data-mail data-mail-subject="Question about AlexAI Resume Help">a.eden+orders at steelcloudsolutions dot com</span></p>
+    </div>
+    <div>
+      <h2>Free</h2>
+      <ul>
+        <li><a href="../ats-check/index.html">Keyword check</a></li>
+        <li><a href="index.html">Cover letter check</a></li>
+        <li><a href="../guides/index.html">Guides</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>The service</h2>
+      <ul>
+        <li><a href="../index.html#paid">Paid options</a></li>
+        <li><a href="../privacy.html">Privacy</a></li>
+        <li><a href="../terms.html">Terms</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script src="../assets/site.js"></script>
+<script src="checker.js"></script>
+<script src="tool.js"></script>
+</body>
+</html>
