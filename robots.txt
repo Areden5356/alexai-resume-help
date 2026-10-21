@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: %%BASE_URL%%/sitemap.xml
+Sitemap: https://areden5356.github.io/alexai-resume-help/sitemap.xml
