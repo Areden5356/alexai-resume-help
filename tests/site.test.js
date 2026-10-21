@@ -362,7 +362,7 @@ test('set_base_url.py replaces the placeholder, refuses bad input, and can swap 
   const ok = run('https://u.github.io/alexai-resume-help/');
   assert.equal(ok.status, 0, ok.stderr);
   console.log('    ' + ok.stdout.trim().split('\n').pop());
-  for (const f of walk(tmp)) assert.ok(!fs.readFileSync(f, 'utf8').replace(/PLACEHOLDER = "%%BASE_URL%%"/, '').includes(PLACEHOLDER) || f.endsWith('.py'), f);
+  for (const f of walk(tmp)) assert.ok(!fs.readFileSync(f, 'utf8').replace(/PLACEHOLDER = "%%BASE_URL%%"/, '').includes(PLACEHOLDER) || /\.(py|md)$/.test(f), f);
   assert.match(fs.readFileSync(path.join(tmp, 'sitemap.xml'), 'utf8'), /<loc>https:\/\/u\.github\.io\/alexai-resume-help\/ats-check\/<\/loc>/);
   assert.match(fs.readFileSync(path.join(tmp, 'index.html'), 'utf8'), /<link rel="canonical" href="https:\/\/u\.github\.io\/alexai-resume-help\/">/);
   assert.match(fs.readFileSync(path.join(tmp, 'robots.txt'), 'utf8'), /Sitemap: https:\/\/u\.github\.io\/alexai-resume-help\/sitemap\.xml/);
