@@ -20,6 +20,11 @@ matching the visible FAQ, guide word counts and dates, and `set_base_url.py`.
   `ats-check/` (keyword overlap), `cover-letter-check/` (nine labelled heuristics) and
   `bullet-check/` (five labelled heuristics per resume bullet: opening verb, number or outcome,
   length, vague words, tense). Every rule shows a "How this rule works" explanation.
+- `sample/index.html`: a fully invented sample of the $39 pack (posting, messy original, emailed facts,
+  rewritten resume, cover letter, what changed and why, questions asked). Every block carries the
+  "Example, invented for illustration" tag. `tests/site.test.js` checks that the rewrite and letter add
+  no number, name or claim absent from the invented inputs, and contain no brackets. If you change the
+  sample, keep it that way. It is linked from the nav and footer of every page, the paid section and the guides index.
 - 17 guides in `guides/`, grouped by job stage on `guides/index.html`. Each shows an "Updated" date
   in a `<p class="meta">` line, and the index card must show the same date (the link test checks it).
   When you edit a guide, change both dates and `lastmod` in `sitemap.xml`.

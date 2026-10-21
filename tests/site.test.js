@@ -59,7 +59,7 @@ test('the expected pages exist', () => {
     'guides/reference-and-employment-gap-questions-answered-honestly.html',
     'guides/resume-file-name-and-format-pdf-or-word.html', 'guides/resume-formatting-that-parses-cleanly.html',
     'guides/resume-summary-vs-objective-for-students.html',
-    'guides/tailor-resume-to-job-posting.html', 'index.html', 'privacy.html', 'terms.html'
+    'guides/tailor-resume-to-job-posting.html', 'index.html', 'privacy.html', 'sample/index.html', 'terms.html'
   ].sort());
 });
 
@@ -408,4 +408,66 @@ test('set_base_url.py replaces the placeholder, refuses bad input, and can swap 
   assert.equal(swap.status, 0, swap.stderr);
   assert.match(fs.readFileSync(path.join(tmp, '404.html'), 'utf8'), /href="https:\/\/other\.example\.org\/404\.html"/);
   fs.rmSync(tmp, { recursive: true, force: true });
+});
+
+test('sample pack: labelled invented everywhere, uses only supplied facts, brackets nothing, adds no number', () => {
+  const html = read(path.join(ROOT, 'sample', 'index.html'));
+  const text = visibleText(html);
+  // labels: a banner at the top plus one tag on each of the six blocks
+  assert.match(text, /EXAMPLE, INVENTED FOR ILLUSTRATION\./);
+  assert.match(text, /No real customer's information is shown/);
+  assert.ok(html.indexOf('id="invented-notice"') < html.indexOf('<h2>'));
+  const tags = (html.match(/<span class="tag">Example, invented for illustration<\/span>/g) || []).length;
+  const examples = (html.match(/class="example"/g) || []).length;
+  assert.equal(examples, 6);
+  assert.equal(tags, examples);
+
+  const block = (label) => {
+    const m = html.match(new RegExp('<pre[^>]*aria-label="' + label + '"[^>]*>([\\s\\S]*?)</pre>'));
+    assert.ok(m, 'missing block ' + label);
+    return squash(m[1]);
+  };
+  const posting = block('Invented job posting');
+  const before = block('Invented original resume, before');
+  const email = block('Invented email from the student with extra facts');
+  const after = block('Invented rewritten resume, after');
+  const letter = block('Invented cover letter');
+  const supplied = (posting + ' ' + before + ' ' + email).toLowerCase();
+
+  // nothing is bracketed or left as a blank to fill in
+  for (const [name, t] of [['after', after], ['letter', letter]]) {
+    assert.ok(!/[\[\]{}<>]|\bTBD\b|\bXX+\b|\bINSERT\b|\bPLACEHOLDER\b/i.test(t), name + ' contains a bracket or placeholder');
+  }
+  // no new numbers: every digit run in the deliverables appears in the supplied materials
+  for (const [name, t] of [['after', after], ['letter', letter]]) {
+    for (const n of t.match(/\d+/g) || []) assert.ok(supplied.includes(n), name + ' has a number that was not supplied: ' + n);
+  }
+  // only the two numbers the student gave with a quantity: "about 20 hours" and "about twice"
+  assert.ok(/about 20 hours a week/.test(email) && /about twice a week/.test(email));
+  // every capitalised tool, school and employer name in the deliverables is in the supplied materials
+  const named = ['Canva', 'Excel', 'Instagram', 'Microsoft Word', 'Greenleaf Garden Center', 'Student Activities Board', 'Example State College', 'Larkspur Trail Outfitters', 'Business Statistics'];
+  for (const n of named) for (const [name, t] of [['after', after], ['letter', letter]]) {
+    if (t.includes(n)) assert.ok(supplied.includes(n.toLowerCase()) || (n === 'Microsoft Word' && supplied.includes('word')), name + ' names ' + n + ' which was not supplied');
+  }
+  // the letter names the employer and the role and answers the posting
+  assert.ok(letter.includes('Larkspur Trail Outfitters') && /Marketing Assistant/.test(letter));
+  assert.match(letter, /trail clean-up/);
+  // claims that were not supplied must not appear
+  for (const bad of ['hard worker', 'people person', 'motivated', 'team player', 'leader', 'increased', 'grew', 'followers', 'References available']) {
+    assert.ok(!after.toLowerCase().includes(bad.toLowerCase()) && !letter.toLowerCase().includes(bad.toLowerCase()), 'deliverable contains an unsupported claim: ' + bad);
+  }
+  // one column: no tabs, no runs of spaces used as columns, no table in the page
+  const rawAfter = html.match(/aria-label="Invented rewritten resume, after"[^>]*>([\s\S]*?)<\/pre>/)[1];
+  assert.ok(!/\t| {3,}/.test(rawAfter) && !/<table/i.test(html));
+  // standard headings in the rewrite
+  for (const h of ['EDUCATION', 'EXPERIENCE', 'SKILLS']) assert.ok(after.includes(h), 'missing heading ' + h);
+  // the change list and the questions are present, with a rule behind each change
+  const changes = html.match(/<h2>What changed and why<\/h2>[\s\S]*?<\/ol>/)[0];
+  const items = changes.match(/<li>[\s\S]*?<\/li>/g);
+  assert.ok(items.length >= 8);
+  items.forEach((li) => assert.match(li, /Rule:/));
+  const asks = html.match(/<h2>What I would ask you<\/h2>[\s\S]*?<\/ol>/)[0];
+  assert.ok((asks.match(/<li>/g) || []).length >= 5);
+  // no real-looking contact data: example.com and the 555 prefix only
+  assert.ok(/@example\.com/.test(html) && /555-010-/.test(html));
 });

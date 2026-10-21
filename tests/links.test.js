@@ -170,3 +170,19 @@ test('each guide page shows the same updated date as its card in the guides inde
     assert.ok(page.includes('<p class="meta">Updated ' + m[2] + '</p>'), m[1] + ' date differs from the index card (' + m[2] + ')');
   }
 });
+
+test('the sample pack is linked from the home page (twice), the guides index and the 404 page, and from the nav and footer of every page', () => {
+  const target = path.join(ROOT, 'sample', 'index.html');
+  const count = (from) => { const page = path.join(ROOT, from); return references(read(page)).map((r) => resolve(page, r)).filter((r) => r && r.file === target).length; };
+  assert.ok(count('index.html') >= 4, 'home page needs the nav, the paid section (two links) and the footer, found ' + count('index.html'));
+  assert.ok(count('guides/index.html') >= 3, 'guides index needs a body link plus nav and footer');
+  for (const page of pages.filter((p) => rel(p) !== '404.html' && rel(p) !== 'sample/index.html')) {
+    const hits = references(read(page)).map((r) => resolve(page, r)).filter((r) => r && r.file === target);
+    assert.ok(hits.length >= 2, rel(page) + ' links to the sample pack ' + hits.length + ' time(s)');
+  }
+  assert.match(read(path.join(ROOT, '404.html')), /data-root="sample\/index\.html"/);
+  // the sample must sit next to the paid section, not only in the chrome
+  const home = read(path.join(ROOT, 'index.html'));
+  const paid = home.slice(home.indexOf('id="paid"'), home.indexOf('Two smaller paid options'));
+  assert.match(paid, /href="sample\/index\.html"/, 'no sample link inside the paid section');
+});

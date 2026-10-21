@@ -139,3 +139,16 @@ test('contrast ratios for the color tokens, light and dark (text 4.5:1, focus ri
   rows.forEach((r) => console.log('    ' + r));
   console.log('    lowest text ratio: ' + minText.toFixed(2) + ', lowest non-text ratio: ' + minNon.toFixed(2));
 });
+
+test('the sample pack page: every text block is a labelled, keyboard-scrollable region, and the invented notice is the first thing in the content', () => {
+  const html = read(path.join(ROOT, 'sample', 'index.html'));
+  const blocks = [...html.matchAll(/<pre\b[^>]*>/g)].map((m) => m[0]);
+  assert.equal(blocks.length, 5, 'posting, original resume, email, new resume and letter');
+  for (const b of blocks) {
+    assert.ok(attr(b, 'aria-label'), 'pre without aria-label: ' + b);
+    assert.equal(attr(b, 'tabindex'), '0', 'pre must be reachable by keyboard so a long line can be scrolled: ' + b);
+  }
+  const firstNote = html.indexOf('id="invented-notice"');
+  assert.ok(firstNote > 0 && firstNote < html.indexOf('<h2>'), 'the invented notice must come before the first section');
+  assert.match(html, /<a href="index\.html" aria-current="page">Sample pack<\/a>/);
+});
