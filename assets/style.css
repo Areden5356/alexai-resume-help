@@ -152,7 +152,7 @@ pre.sample {
 }
 
 /* Article pages */
-.article { padding: 2.2rem 0 1rem; }
+.article { padding: 2.2rem 1rem 1rem; }
 .crumbs { font-size: 0.9rem; color: var(--muted); margin-bottom: 1.2rem; }
 .meta { color: var(--muted); font-size: 0.9rem; margin: 0 0 1.6rem; }
 .cta-box { background: var(--surface); border: 1px solid var(--line); padding: 1.2rem 1.4rem; margin: 2.4rem 0 1rem; border-radius: 2px; }
