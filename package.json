@@ -1,0 +1,9 @@
+{
+  "name": "alexai-resume-help",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static site for AlexAI Resume Help. No dependencies and no build step.",
+  "scripts": {
+    "test": "node --test tests/analyzer.test.js tests/site.test.js"
+  }
+}

@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free resume keyword check against a job posting</title>
+<meta name="description" content="Paste your resume and a job posting. See which of the posting's key terms your resume uses and which it lacks, plus basic format checks. Runs in your browser.">
+<link rel="canonical" href="%%BASE_URL%%/ats-check/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AlexAI Resume Help">
+<meta property="og:title" content="Free resume keyword check against a job posting">
+<meta property="og:description" content="Paste your resume and a job posting. See which key terms your resume uses and which it lacks. Nothing is uploaded.">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href="../index.html"><span class="brand-mark">AlexAI</span><span class="brand-sub">Resume Help</span></a>
+    <nav aria-label="Main">
+      <a href="index.html" aria-current="page">Free keyword check</a>
+      <a href="../guides/index.html">Guides</a>
+      <a class="btn btn-small" href="../index.html#pack">The $39 pack</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap article">
+  <p class="crumbs"><a href="../index.html">Home</a> / Free keyword check</p>
+  <h1>Check your resume against a job posting</h1>
+  <p class="lede">Paste both, press the button, and see which of the posting's key terms your resume already uses. It is free.</p>
+  <p class="privacy-line"><strong>Nothing is uploaded or stored.</strong> The check runs in this page, in your browser. Your text is not sent to a server, not saved, and not logged, and this site sets no cookies. Close the tab and it is gone.</p>
+
+  <noscript><p class="error">This tool needs JavaScript. Turn it on for this page and reload.</p></noscript>
+
+  <div class="tool-grid">
+    <div>
+      <label class="field" for="resume">Your resume (plain text)</label>
+      <textarea id="resume" spellcheck="false" placeholder="Paste your whole resume here"></textarea>
+      <p class="hint">Copy from Word, Google Docs or a PDF. Put each heading on its own line.</p>
+    </div>
+    <div>
+      <label class="field" for="posting">The job posting</label>
+      <textarea id="posting" spellcheck="false" placeholder="Paste the full posting, including the requirements"></textarea>
+      <p class="hint">Include the title line and the requirements section.</p>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn" type="button" id="run">Check overlap</button>
+    <button class="btn btn-quiet" type="button" id="sample">Try it with a made-up example</button>
+    <button class="btn btn-quiet" type="button" id="clear">Clear</button>
+  </div>
+  <p class="error" id="error" role="alert"></p>
+
+  <div class="results" id="results" aria-live="polite" hidden></div>
+
+  <h2>What this is, and what it is not</h2>
+  <div class="prose">
+    <p>This is a keyword overlap check. It picks out the words and short phrases a posting leans on, then tells you which ones your resume contains. That is all it does.</p>
+    <p>It is not an applicant tracking system, and it does not imitate one. Employers use different software, and some have a person read every application. Nobody outside those systems can tell you how a given resume will be ranked, so treat the result as a prompt to reread your resume, not as a grade.</p>
+    <p>A missing term is a question, not an instruction. If you really have used Tableau, say so. If you have not, do not add it. A resume that claims skills you cannot show falls apart in the first interview.</p>
+
+    <h3>How the terms are picked</h3>
+    <ul>
+      <li>Single words and phrases of two or three words from the posting, never across a comma or a line break.</li>
+      <li>Kept when the posting repeats them, when they are a recognized skill or tool, or when they look like an acronym or a technical name such as SQL or C++.</li>
+      <li>Everyday posting filler such as "team", "strong" and "years" is ignored.</li>
+      <li>Matching ignores capital letters and simple endings, so "managed" matches "managing". Short forms count too: "SEO" matches "search engine optimization".</li>
+      <li>The skill list is short and general. Narrow fields may have terms it does not know. Those are still caught if the posting repeats them.</li>
+      <li>One-letter names such as the language R are not detected.</li>
+    </ul>
+    <p class="small">The format checks read pasted text only. They cannot see columns, tables, text boxes, headers, footers or images. For how to lay a resume out so most software reads it cleanly, see <a href="../guides/resume-formatting-that-parses-cleanly.html">the formatting guide</a>.</p>
+  </div>
+
+  <div class="cta-box">
+    <h2>Want a second pair of eyes on the whole thing?</h2>
+    <p>If you would rather hand it off, I rewrite your resume and write a cover letter for one specific posting, drafted with AI and reviewed by me, using only the facts you give me. It is $39 and arrives within 48 hours of when I have your resume and the posting.</p>
+    <p><a href="../index.html#pack">See what the pack includes</a>. You do not need it to use this tool.</p>
+  </div>
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap cols">
+    <div>
+      <h2>AlexAI Resume Help</h2>
+      <p>A one-person resume service. Drafts are written with AI and reviewed by a person before they reach you.</p>
+      <p>Questions: <span data-mail data-mail-subject="Question about AlexAI Resume Help">a.eden+orders at steelcloudsolutions dot com</span></p>
+    </div>
+    <div>
+      <h2>Free</h2>
+      <ul>
+        <li><a href="index.html">Keyword check</a></li>
+        <li><a href="../guides/index.html">Guides</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>The service</h2>
+      <ul>
+        <li><a href="../index.html#pack">The $39 pack</a></li>
+        <li><a href="../privacy.html">Privacy</a></li>
+        <li><a href="../terms.html">Terms</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script src="../assets/site.js"></script>
+<script src="analyzer.js"></script>
+<script src="tool.js"></script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+Marketing Analyst Intern
+
+About the role
+We are a small outdoor gear company looking for a marketing analyst intern for the spring term. You will report to the Director of Marketing and help us understand which campaigns bring customers back.
+
+What you'll do
+- Build weekly dashboards in Tableau that track email marketing and paid social performance.
+- Run A/B testing on subject lines and landing pages, then summarize results for the team.
+- Pull data with SQL and clean it in Excel or Python.
+- Support social media planning and write short reports for stakeholders.
+
+Requirements
+- Currently pursuing a bachelor's degree in marketing, business, statistics, or a related field.
+- Experience with SQL and Excel. Familiarity with Google Analytics is a plus.
+- Strong written communication and attention to detail.
+- Comfortable with data analysis and data visualization.
+- Ability to manage several projects at once in a fast-paced environment.
+
+Nice to have
+- Experience with HubSpot or another CRM.
+- Basic knowledge of SEO.
+
+Benefits
+Paid internship, flexible hours, and a product discount. We are an equal opportunity employer.

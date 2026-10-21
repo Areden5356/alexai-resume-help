@@ -1,0 +1,27 @@
+Jordan Example
+jordan.example@example.com | (555) 010-0142 | linkedin.com/in/jordan-example-sample
+
+EDUCATION
+State University, B.S. in Business Administration, Marketing concentration
+Expected May 2027
+
+EXPERIENCE
+Campus Outfitters, Sales Associate
+Aug 2024 - Present
+- Helped customers choose gear and ran the register on weekend shifts
+- Tracked weekly sales in an Excel sheet and shared totals with the store lead
+- Posted twice a week on the store's Instagram account
+
+Marketing Club, Social Media Chair
+Sep 2023 - May 2024
+- Planned and scheduled posts across three accounts
+- Wrote the weekly email newsletter
+- Reviewed which posts got the most replies and adjusted the next week's plan
+
+PROJECTS
+Coffee Shop Survey, class project, Spring 2025
+- Collected 60 survey responses and summarized them in a short slide deck
+- Used pivot tables to compare answers by age group
+
+SKILLS
+Excel, Google Sheets, Canva, Mailchimp, written communication, SQL (coursework)

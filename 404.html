@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page not found | AlexAI Resume Help</title>
+<meta name="description" content="That page does not exist. Go back to the AlexAI Resume Help home page, the free keyword check, or the guides.">
+<meta name="robots" content="noindex">
+<link rel="canonical" href="%%BASE_URL%%/404.html">
+<style>
+/* A 404 is served from whatever path was mistyped, so relative links cannot be trusted
+   here. This page carries its own minimal styles and works out the site root in script. */
+:root { --bg: #f6f1e6; --ink: #1c2230; --muted: #4a5163; --link: #1a4a9c; --accent: #b02a20; }
+@media (prefers-color-scheme: dark) { :root { --bg: #13161e; --ink: #ece7da; --muted: #b1b7c6; --link: #8db4ff; --accent: #ee6a5e; } }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 1.0625rem/1.65 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+main { max-width: 40rem; margin: 0 auto; padding: 4rem 1rem; }
+h1 { font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif; font-size: 2.2rem; line-height: 1.2; margin: 0 0 1rem; }
+a { color: var(--link); }
+.code { font-family: ui-monospace, Consolas, monospace; color: var(--accent); font-size: 0.85rem; letter-spacing: 0.08em; }
+</style>
+</head>
+<body>
+<main id="main">
+  <p class="code">404</p>
+  <h1>That page is not here.</h1>
+  <p>The link may be old or mistyped. These pages do exist:</p>
+  <ul>
+    <li><a data-root="index.html" href="index.html">AlexAI Resume Help home</a></li>
+    <li><a data-root="ats-check/index.html" href="ats-check/index.html">Free resume keyword check</a></li>
+    <li><a data-root="guides/index.html" href="guides/index.html">Resume and cover letter guides</a></li>
+  </ul>
+</main>
+<script>
+/* Links above are relative for when this file is opened directly. When it is served for a
+   missing path, derive the site root from the canonical URL (set by set_base_url.py). */
+(function () {
+  var root = '/';
+  try {
+    var c = document.querySelector('link[rel="canonical"]');
+    root = new URL(c.getAttribute('href')).pathname.replace(/404\.html$/, '');
+  } catch (e) { /* placeholder still in place: leave root as '/' */ }
+  var links = document.querySelectorAll('a[data-root]');
+  for (var i = 0; i < links.length; i++) links[i].setAttribute('href', root + links[i].getAttribute('data-root'));
+})();
+</script>
+</body>
+</html>
