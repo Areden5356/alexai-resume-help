@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free resume bullet checker, rule by rule</title>
+<meta name="description" content="Paste resume bullets and get five plain checks on each: opening verb, number or outcome, length, vague words and tense. Every rule is explained and labelled.">
+<link rel="canonical" href="https://areden5356.github.io/alexai-resume-help/bullet-check/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AlexAI Resume Help">
+<meta property="og:title" content="Free resume bullet checker, rule by rule">
+<meta property="og:description" content="Paste resume bullets. Five plain checks on each, every rule explained and labelled as a heuristic. Nothing is uploaded.">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href="../index.html"><span class="brand-mark">AlexAI</span><span class="brand-sub">Resume Help</span></a>
+    <nav aria-label="Main">
+      <a href="../ats-check/index.html">Free keyword check</a>
+      <a href="../cover-letter-check/index.html">Free letter check</a>
+      <a href="index.html" aria-current="page">Free bullet check</a>
+      <a href="../guides/index.html">Guides</a>
+      <a class="btn btn-small" href="../index.html#paid">Paid help</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap article">
+  <p class="crumbs"><a href="../index.html">Home</a> / Free bullet check</p>
+  <h1>Check your resume bullets, one rule at a time</h1>
+  <p class="lede">Paste the bullets from one job, one per line, and get five plain checks on each. It is free.</p>
+  <p class="privacy-line"><strong>Nothing is uploaded or stored.</strong> The checks run in this page, in your browser. Your text is not sent to a server, not saved, and not logged, and this site sets no cookies. Close the tab and it is gone.</p>
+
+  <noscript><p class="error">This tool needs JavaScript. Turn it on for this page and reload.</p></noscript>
+
+  <label class="field" for="bullets">Your bullets (plain text, one per line)</label>
+  <textarea id="bullets" spellcheck="false" placeholder="Managed three social accounts for a campus club&#10;Sold 40 raffle tickets in two weeks"></textarea>
+  <p class="hint">Bullet marks such as a hyphen, asterisk or number are removed for you. Paste the bullets of one job together so the tense check has something to compare.</p>
+
+  <div class="actions">
+    <button class="btn" type="button" id="run">Check the bullets</button>
+    <button class="btn btn-quiet" type="button" id="sample">Try it with made-up bullets</button>
+    <button class="btn btn-quiet" type="button" id="clear">Clear</button>
+  </div>
+  <p class="error" id="error" role="alert"></p>
+
+  <div class="results" id="results" aria-live="polite" hidden></div>
+
+  <h2>What this is, and what it is not</h2>
+  <div class="prose">
+    <p>This is a set of five fixed rules run over text you paste. Each one is a heuristic: a pattern, a word list or a count with a cutoff I chose for ordinary one or two line bullets. Each result has a short explanation of exactly what the rule looks at, under "How this rule works".</p>
+    <p>It cannot tell whether a bullet is true. It cannot know your job, what you were proud of, or which number matters to the employer you are writing to. A bullet can pass all five checks and still say nothing useful, and a bullet can trip two and still be the right one. Use the results as a list of bullets to reread, and change a bullet only to something that is true.</p>
+    <p>It does not simulate an applicant tracking system. Nobody outside an employer can say how theirs reads a bullet.</p>
+
+    <h3>The five checks</h3>
+    <ul>
+      <li><strong>Opening verb.</strong> Flags starts such as "responsible for", "duties included" and "worked on". Passes a list of action verbs and any other word ending in -ed.</li>
+      <li><strong>Number or outcome.</strong> Looks for a digit, a dollar or percent sign, a number word, or a verb that names a result. It never asks you to invent a number.</li>
+      <li><strong>Length.</strong> Words per bullet. Eight to thirty is treated as fine.</li>
+      <li><strong>Vague words.</strong> A fixed list of words and phrases such as "various", "stuff" and "team player".</li>
+      <li><strong>Tense consistency.</strong> Compares the tense of each bullet's first verb with the majority across the bullets you pasted.</li>
+    </ul>
+    <p class="small">Known limits: the verb list is finite, so a real action verb it does not know gets a "look" and not a "fine". The tense rule reads only the first word and cannot tell a current job from a finished one. Numbers are detected, not judged. The cutoffs and the vague word list are my judgment. The Purdue OWL <a href="https://owl.purdue.edu/owl/job_search_writing/skilled_labor_job_search_resources/resumes/resume_sections_part_1.html">resume sections page</a> advises specific action verbs, past tense for earlier jobs and present tense for a current one, and the same structure across bullets. Nothing else here comes from an outside standard. For how to find the facts behind a bullet, see <a href="../guides/achievement-bullets-from-duties.html">turning duties into bullets</a>, and for how many to write, <a href="../guides/how-many-bullets-per-job-on-a-resume.html">how many bullets per job</a>.</p>
+  </div>
+
+  <div class="cta-box">
+    <h2>More free tools</h2>
+    <p>Compare your whole resume with a posting in the <a href="../ats-check/index.html">keyword check</a>, or check a letter in the <a href="../cover-letter-check/index.html">cover letter check</a>. If you would rather have a person draft it, <a href="../index.html#paid">paid help is optional</a>.</p>
+  </div>
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap cols">
+    <div>
+      <h2>AlexAI Resume Help</h2>
+      <p>A one-person resume service. Drafts are written with AI and reviewed by a person before they reach you.</p>
+      <p>Questions: <span data-mail data-mail-subject="Question about AlexAI Resume Help">a.eden+orders at steelcloudsolutions dot com</span></p>
+    </div>
+    <div>
+      <h2>Free</h2>
+      <ul>
+        <li><a href="../ats-check/index.html">Keyword check</a></li>
+        <li><a href="../cover-letter-check/index.html">Cover letter check</a></li>
+        <li><a href="index.html">Bullet check</a></li>
+        <li><a href="../guides/index.html">Guides</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>The service</h2>
+      <ul>
+        <li><a href="../index.html#paid">Paid help</a></li>
+        <li><a href="../privacy.html">Privacy</a></li>
+        <li><a href="../terms.html">Terms</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script src="../assets/site.js"></script>
+<script src="checker.js"></script>
+<script src="tool.js"></script>
+</body>
+</html>

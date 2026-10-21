@@ -127,3 +127,46 @@ test('related-guide links in each guide point at other guides, never at itself',
     assert.ok(!hrefs.includes(g), g + ' links to itself under Related guides');
   }
 });
+
+test('the bullet check is linked from the home page, the guides index, the keyword check and the cover letter check, and from the nav and footer of every page', () => {
+  const target = path.join(ROOT, 'bullet-check', 'index.html');
+  for (const from of ['index.html', 'guides/index.html', 'ats-check/index.html', 'cover-letter-check/index.html']) {
+    const page = path.join(ROOT, from);
+    const hits = references(read(page)).map((r) => resolve(page, r)).filter((r) => r && r.file === target);
+    assert.ok(hits.length >= 1, from + ' does not link to the bullet check');
+  }
+  // every page except the 404 (which lists the tools in its own list) links to it at least twice: nav and footer
+  for (const page of pages.filter((p) => rel(p) !== '404.html' && rel(p) !== 'bullet-check/index.html')) {
+    const hits = references(read(page)).map((r) => resolve(page, r)).filter((r) => r && r.file === target);
+    assert.ok(hits.length >= 2, rel(page) + ' links to the bullet check ' + hits.length + ' time(s)');
+  }
+  const four04 = read(path.join(ROOT, '404.html'));
+  assert.match(four04, /data-root="bullet-check\/index\.html"/);
+});
+
+test('the guides index groups every guide exactly once under a stage heading and shows an updated date on each card', () => {
+  const html = read(path.join(ROOT, 'guides', 'index.html'));
+  const guides = fs.readdirSync(path.join(ROOT, 'guides')).filter((f) => f.endsWith('.html') && f !== 'index.html');
+  const sections = [...html.matchAll(/<section aria-labelledby="(g-[a-z-]+)">([\s\S]*?)<\/section>/g)];
+  assert.ok(sections.length >= 4, 'expected at least four stage groups, found ' + sections.length);
+  const seen = [];
+  for (const [, id, body] of sections) {
+    assert.match(body, new RegExp('<h2 id="' + id + '">'), id + ' heading');
+    const cards = [...body.matchAll(/<li>[\s\S]*?<\/li>/g)].map((m) => m[0]);
+    assert.ok(cards.length >= 2, id + ' has fewer than two guides');
+    for (const c of cards) {
+      seen.push(c.match(/href="([^"]+)"/)[1]);
+      assert.match(c, /<p class="small">Updated \d{1,2} [A-Z][a-z]+ 20\d\d<\/p>/, 'a card in ' + id + ' has no updated date');
+    }
+  }
+  assert.deepEqual(seen.sort(), guides.sort(), 'every guide must appear exactly once in the index');
+  console.log('    groups: ' + sections.length + ', guides listed: ' + seen.length);
+});
+
+test('each guide page shows the same updated date as its card in the guides index', () => {
+  const idx = read(path.join(ROOT, 'guides', 'index.html'));
+  for (const m of idx.matchAll(/<li>\s*<a class="title" href="([^"]+)">[\s\S]*?Updated ([^<]+)<\/p>/g)) {
+    const page = read(path.join(ROOT, 'guides', m[1]));
+    assert.ok(page.includes('<p class="meta">Updated ' + m[2] + '</p>'), m[1] + ' date differs from the index card (' + m[2] + ')');
+  }
+});

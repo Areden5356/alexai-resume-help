@@ -222,3 +222,12 @@ input[type="text"] {
 .checks details:first-of-type { border-top: 0; }
 .checks summary { font-weight: 400; color: var(--muted); font-size: 0.88rem; }
 .checks details p { font-size: 0.9rem; color: var(--muted); }
+
+/* Placeholder text uses a checked token instead of the browser default */
+::placeholder { color: var(--muted); opacity: 1; }
+
+/* Bullet check */
+.checks .st.na { color: var(--muted); }
+.bullet-card { border-top: 2px solid var(--ink); margin-top: 1.4rem; padding-top: 0.5rem; }
+.bullet-card .bullet-text { font-family: var(--serif); font-size: 1.15rem; margin: 0.3rem 0; }
+.bullet-card .score { font-family: var(--mono); font-size: 0.85rem; color: var(--muted); margin: 0 0 0.3rem; }
