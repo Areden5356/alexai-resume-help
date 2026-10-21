@@ -11,7 +11,7 @@ All links are relative, so it works at any base path. Status: published at https
 Node 22 or newer. The tests cover the keyword check logic (`ats-check/analyzer.js`), the cover
 letter checks (`cover-letter-check/checker.js`), the bullet checks (`bullet-check/checker.js`), a link
 checker (`tests/links.test.js`), accessibility basics (`tests/a11y.test.js`) and site integrity: links,
-titles, descriptions, the Stripe link, no emails in source, no trackers or storage APIs, FAQ markup
+titles, descriptions, the four Stripe links (the $39 pack and the three smaller offers), no emails in source, no trackers or storage APIs, FAQ markup
 matching the visible FAQ, guide word counts and dates, and `set_base_url.py`.
 
 ## What is here

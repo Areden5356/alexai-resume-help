@@ -183,6 +183,6 @@ test('the sample pack is linked from the home page (twice), the guides index and
   assert.match(read(path.join(ROOT, '404.html')), /data-root="sample\/index\.html"/);
   // the sample must sit next to the paid section, not only in the chrome
   const home = read(path.join(ROOT, 'index.html'));
-  const paid = home.slice(home.indexOf('id="paid"'), home.indexOf('Two smaller paid options'));
+  const paid = home.slice(home.indexOf('id="paid"'), home.indexOf('Three smaller paid options'));
   assert.match(paid, /href="sample\/index\.html"/, 'no sample link inside the paid section');
 });

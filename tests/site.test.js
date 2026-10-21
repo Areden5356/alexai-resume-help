@@ -15,9 +15,10 @@ const PLACEHOLDER = '%%BASE_URL%%';
 const BASE = 'https://areden5356.github.io/alexai-resume-help';
 const STRIPE_LI = 'https://buy.stripe.com/3cI6oH7Nm79c6JC2eAg3602';
 const STRIPE_CL = 'https://buy.stripe.com/14AbJ1ffObpsd8006sg3603';
+const STRIPE_IP = 'https://buy.stripe.com/14A14nffO1OS3xq2eAg3604';
 const SOURCE_HOSTS = ['https://owl.purdue.edu/owl/job_search_writing/', 'https://www.careeronestop.org/', 'https://uvic.ca/career-services/',
   'https://www.linkedin.com/help/', 'https://capd.mit.edu/', 'https://career.arizona.edu/'];
-const ALLOWED_EXTERNAL = [STRIPE, STRIPE_LI, STRIPE_CL, 'https://stripe.com/privacy', ...SOURCE_HOSTS, BASE];
+const ALLOWED_EXTERNAL = [STRIPE, STRIPE_LI, STRIPE_CL, STRIPE_IP, 'https://stripe.com/privacy', ...SOURCE_HOSTS, BASE];
 
 function walk(dir, out = []) {
   for (const name of fs.readdirSync(dir)) {
@@ -135,13 +136,13 @@ test('internal links and assets resolve, relative, with valid anchors', () => {
   assert.ok(checked > 100);
 });
 
-test('the $39 Stripe link is present exactly; only the two approved secondary offers add other Stripe URLs', () => {
+test('the $39 Stripe link is present exactly; only the three approved secondary offers add other Stripe URLs', () => {
   const home = read(path.join(ROOT, 'index.html'));
   const count = home.split(STRIPE).length - 1;
   assert.ok(count >= 3, 'expected at least 3 pay links on the landing page, found ' + count);
   for (const f of textFiles) {
     for (const m of read(f).matchAll(/https?:\/\/buy\.stripe\.com\/[^\s"'<)]*/g)) {
-      assert.ok([STRIPE, STRIPE_LI, STRIPE_CL].includes(m[0]), rel(f) + ' has an unapproved Stripe URL ' + m[0]);
+      assert.ok([STRIPE, STRIPE_LI, STRIPE_CL, STRIPE_IP].includes(m[0]), rel(f) + ' has an unapproved Stripe URL ' + m[0]);
       if (m[0] !== STRIPE) assert.equal(rel(f), 'index.html', 'secondary offers belong on the landing page only');
     }
   }
@@ -470,4 +471,27 @@ test('sample pack: labelled invented everywhere, uses only supplied facts, brack
   assert.ok((asks.match(/<li>/g) || []).length >= 5);
   // no real-looking contact data: example.com and the 555 prefix only
   assert.ok(/@example\.com/.test(html) && /555-010-/.test(html));
+});
+
+test('the $25 interview prep offer is honest on the landing page and matches the terms and privacy pages', () => {
+  const home = read(path.join(ROOT, 'index.html'));
+  const terms = read(path.join(ROOT, 'terms.html'));
+  const privacy = read(path.join(ROOT, 'privacy.html'));
+  assert.equal(home.split(STRIPE_IP).length - 1, 1, 'the interview prep link must appear exactly once');
+  assert.match(home, new RegExp('<a class="btn btn-quiet" href="' + STRIPE_IP + '">Interview prep, \\$25 on Stripe</a>'));
+  const card = home.slice(home.indexOf('<h3>Interview prep sheet, $25</h3>'), home.indexOf(STRIPE_IP));
+  assert.ok(card.length > 200, 'card not found');
+  assert.match(card, /likely, not certain/);
+  assert.match(card, /do not know what any employer will ask/);
+  assert.match(card, /within 48 hours/);
+  assert.match(card, /One revision/);
+  assert.match(card, /subject line &quot;Interview prep&quot;/);
+  assert.match(card, /No promise about interviews or jobs/);
+  assert.ok(!/guarantee|will get you|land the job/i.test(card), 'no outcome promises');
+  assert.match(terms, /interview prep sheet for one job posting, \$25/);
+  assert.match(terms, /interview prep sheet is delivered within 48 hours/);
+  assert.match(terms, /I promise no interview, offer or job/);
+  assert.match(terms, /full refund/);
+  assert.match(privacy, /cover letter, LinkedIn and interview prep options/);
+  assert.match(home, /there are four paid options/);
 });
