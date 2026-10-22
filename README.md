@@ -14,6 +14,17 @@ checker (`tests/links.test.js`), accessibility basics (`tests/a11y.test.js`) and
 titles, descriptions, the four Stripe links (the $39 pack and the three smaller offers), no emails in source, no trackers or storage APIs, FAQ markup
 matching the visible FAQ, guide word counts and dates, and `set_base_url.py`.
 
+## Design standards
+
+Checked with `design_lint` (assistant-hub	ools\design_lint). Rules kept here: one primary button per
+view, tokens for every color, two font families (serif and sans, no web fonts), two radius tokens
+(`--radius-control`, `--radius-box`), no colored side bars, an SVG favicon plus apple-touch icon, and a
+social image on every indexable page. `scripts/make_images.py` regenerates `assets/social.png` and
+`assets/apple-touch-icon.png` (needs Pillow and the Windows fonts Georgia and Segoe UI); `assets/icon.svg`
+is written by hand and the script draws the same shape. Every page except the 404 carries a content
+security policy meta that allows only this site, so do not add inline styles, inline scripts or
+third-party files without changing it and the test that guards it.
+
 ## What is here
 
 - Three free tools, each pure JavaScript that runs in the browser and is tested under node:

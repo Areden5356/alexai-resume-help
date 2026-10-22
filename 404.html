@@ -3,21 +3,28 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Page not found | AlexAI Resume Help</title>
 <meta name="description" content="That page does not exist. Go back to the AlexAI Resume Help home page, the free keyword check, or the guides.">
 <meta name="robots" content="noindex">
 <link rel="canonical" href="https://areden5356.github.io/alexai-resume-help/404.html">
+<link rel="icon" data-root="assets/icon.svg" href="assets/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" data-root="assets/apple-touch-icon.png" href="assets/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Page not found | AlexAI Resume Help">
+<meta property="og:description" content="That page does not exist. Go back to the AlexAI Resume Help home page, the free keyword check, or the guides.">
 <style>
 /* A 404 is served from whatever path was mistyped, so relative links cannot be trusted
    here. This page carries its own minimal styles and works out the site root in script. */
-:root { --bg: #f6f1e6; --ink: #1c2230; --muted: #4a5163; --link: #1a4a9c; --accent: #b02a20; }
+:root { color-scheme: light dark; --bg: #f6f1e6; --ink: #1c2230; --muted: #4a5163; --link: #1a4a9c; --accent: #b02a20; }
 @media (prefers-color-scheme: dark) { :root { --bg: #13161e; --ink: #ece7da; --muted: #b1b7c6; --link: #8db4ff; --accent: #ee6a5e; } }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 1.0625rem/1.65 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
 main { max-width: 40rem; margin: 0 auto; padding: 4rem 1rem; }
 h1 { font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif; font-size: 2.2rem; line-height: 1.2; margin: 0 0 1rem; }
 a { color: var(--link); }
 a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
-.code { font-family: ui-monospace, Consolas, monospace; color: var(--accent); font-size: 0.85rem; letter-spacing: 0.08em; }
+.code { font-weight: 700; color: var(--accent); font-size: 0.85rem; letter-spacing: 0.08em; }
 </style>
 </head>
 <body>
@@ -43,7 +50,7 @@ a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
     var c = document.querySelector('link[rel="canonical"]');
     root = new URL(c.getAttribute('href')).pathname.replace(/404\.html$/, '');
   } catch (e) { /* placeholder still in place: leave root as '/' */ }
-  var links = document.querySelectorAll('a[data-root]');
+  var links = document.querySelectorAll('a[data-root], link[data-root]');
   for (var i = 0; i < links.length; i++) links[i].setAttribute('href', root + links[i].getAttribute('data-root'));
 })();
 </script>

@@ -17,7 +17,9 @@
   --bad: #a5271d;
   --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --mono: ui-monospace, "SF Mono", Consolas, "Liberation Mono", monospace;
+  --radius-control: 4px; /* buttons, inputs, chips */
+  --radius-box: 2px;     /* cards, notes, panels */
+  color-scheme: light dark;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -69,10 +71,9 @@ a:hover { text-decoration-thickness: 2px; }
 .brand { text-decoration: none; color: var(--ink); display: inline-flex; align-items: baseline; gap: 0.5rem; }
 .brand-mark { font-family: var(--serif); font-size: 1.45rem; font-weight: 700; letter-spacing: -0.01em; }
 .brand-sub { color: var(--muted); font-size: 0.9rem; }
-.site-header nav { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1.2rem; }
-.site-header nav a { color: var(--ink); text-decoration: none; font-size: 0.95rem; padding: 0.3rem 0; }
+.site-header nav { display: flex; flex-wrap: wrap; align-items: center; gap: 0 1.1rem; }
+.site-header nav a { color: var(--ink); text-decoration: none; font-size: 0.95rem; padding: 0.2rem 0; }
 .site-header nav a:hover { text-decoration: underline; }
-.site-header nav a.btn { color: var(--on-accent); padding: 0.45rem 0.9rem; }
 
 /* Type */
 h1, h2, h3 { font-family: var(--serif); line-height: 1.2; letter-spacing: -0.01em; margin: 0 0 0.6rem; }
@@ -82,37 +83,50 @@ h3 { font-size: 1.2rem; margin-top: 1.8rem; }
 p, ul, ol { margin: 0 0 1rem; }
 li { margin-bottom: 0.4rem; }
 .lede { font-size: 1.2rem; color: var(--muted); max-width: 38rem; }
-.eyebrow { font-family: var(--mono); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); margin: 0 0 0.8rem; }
+.eyebrow { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); margin: 0 0 0.8rem; }
 .small { font-size: 0.9rem; color: var(--muted); }
 .mark { background: var(--mark); padding: 0 0.15em; }
 
 /* Buttons */
 .btn {
   display: inline-block; background: var(--accent); color: var(--on-accent);
-  font-weight: 700; text-decoration: none; padding: 0.8rem 1.4rem; border-radius: 4px;
+  font-weight: 700; text-decoration: none; padding: 0.8rem 1.4rem; border-radius: var(--radius-control);
   border: 2px solid var(--accent); font-family: var(--sans); font-size: 1rem; cursor: pointer;
 }
 .btn:hover { text-decoration: underline; }
 .btn-quiet { background: transparent; color: var(--ink); border-color: var(--ink); }
-.btn-small { font-size: 0.9rem; font-weight: 600; }
 button.btn { line-height: 1.2; }
 .actions { display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: center; margin: 1.4rem 0 0.6rem; }
 
 /* Hero */
-.hero { padding: 3rem 0 2.2rem; }
-.hero-grid { display: grid; gap: 2.2rem; grid-template-columns: 1fr; align-items: start; }
+.hero { padding: 1.4rem 0 1.6rem; }
+@media (min-width: 52rem) { .hero { padding: 3rem 0 2.2rem; } }
+.hero-grid { display: grid; gap: 1.6rem; grid-template-columns: 1fr; align-items: start; }
 @media (min-width: 52rem) { .hero-grid { grid-template-columns: 1.15fr 1fr; gap: 3rem; } }
 
-/* Example card: a marked-up page */
-.proof {
-  background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--accent);
-  padding: 1.2rem 1.3rem; border-radius: 2px; box-shadow: 0 1px 0 var(--line);
-}
-.proof .label { font-family: var(--mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 0.5rem; }
+/* First-screen offer panel: the facts a buyer needs before the long explanation */
+.offer { background: var(--surface); border: 1px solid var(--line); border-top: 3px solid var(--ink); border-radius: var(--radius-box); padding: 1.1rem 1.3rem 1.2rem; }
+.offer .label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 0.3rem; }
+.offer h2 { font-size: 1.35rem; margin: 0 0 0.2rem; }
+.offer .price { margin: 0 0 0.6rem; line-height: 1.1; }
+.offer ul { list-style: none; padding: 0; margin: 0 0 0.9rem; }
+.offer li { border-top: 1px solid var(--line); padding: 0.45rem 0; margin: 0; }
+.offer .links { margin: 0 0 0.8rem; }
+.offer .links li { border-top: 0; padding: 0; }
+.offer p:last-child { margin-bottom: 0; }
+
+/* Quiet links under the one primary button */
+.links { list-style: none; padding: 0; margin: 0 0 1rem; display: flex; flex-wrap: wrap; gap: 0.2rem 1.4rem; }
+.links li { margin: 0; }
+.links a { display: inline-block; padding: 0.3rem 0; }
+
+/* Example: a marked-up page. Ruled top, label above; no box, no bar. */
+.proof { border-top: 2px solid var(--ink); padding-top: 0.8rem; max-width: 42rem; }
+.proof .label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 0.5rem; }
 .proof .before { text-decoration: line-through; text-decoration-color: var(--accent); text-decoration-thickness: 2px; color: var(--muted); }
 .proof .after { font-weight: 600; }
 .proof dl { margin: 0 0 0.9rem; }
-.proof dt { font-family: var(--mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-top: 0.8rem; }
+.proof dt { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-top: 0.8rem; }
 .proof dd { margin: 0.15rem 0 0; }
 
 /* Sections */
@@ -138,24 +152,23 @@ details:first-of-type { border-top: 1px solid var(--line); }
 summary { cursor: pointer; font-weight: 600; list-style-position: outside; }
 details p { margin: 0.6rem 0 0; max-width: 42rem; }
 
-/* Notes and examples inside articles */
-.note, .example {
-  background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--accent);
-  padding: 0.9rem 1.1rem; margin: 1.2rem 0; border-radius: 2px;
-}
-.example .tag { font-family: var(--mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); display: block; margin-bottom: 0.3rem; }
+/* Notes and examples inside articles. A note is a filled box; an example is ruled
+   from above with its label in the accent color. Neither uses a colored side bar. */
+.note { background: var(--surface); border: 1px solid var(--line); padding: 0.9rem 1.1rem; margin: 1.2rem 0; border-radius: var(--radius-box); }
+.example { border-top: 2px solid var(--ink); padding: 0.7rem 0 0.2rem; margin: 1.6rem 0; }
+.example .tag { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); display: block; margin-bottom: 0.3rem; }
 .example p:last-child, .note p:last-child { margin-bottom: 0; }
 .example ul { margin-bottom: 0; }
 pre.sample {
   background: var(--surface); border: 1px solid var(--line); padding: 0.9rem 1.1rem; overflow-x: auto;
-  font-family: var(--mono); font-size: 0.9rem; line-height: 1.5; margin: 1.2rem 0; white-space: pre-wrap;
+  font-family: var(--sans); font-size: 0.95rem; line-height: 1.55; margin: 1.2rem 0; white-space: pre-wrap;
 }
 
 /* Article pages */
 .article { padding: 2.2rem 1rem 1rem; }
 .crumbs { font-size: 0.9rem; color: var(--muted); margin-bottom: 1.2rem; }
 .meta { color: var(--muted); font-size: 0.9rem; margin: 0 0 1.6rem; }
-.cta-box { background: var(--surface); border: 1px solid var(--line); padding: 1.2rem 1.4rem; margin: 2.4rem 0 1rem; border-radius: 2px; }
+.cta-box { background: var(--surface); border: 1px solid var(--line); padding: 1.2rem 1.4rem; margin: 2.4rem 0 1rem; border-radius: var(--radius-box); }
 .cta-box h2 { margin-top: 0; font-size: 1.35rem; }
 .related { padding-left: 1.2rem; }
 .card-list { list-style: none; padding: 0; margin: 1.4rem 0; display: grid; gap: 1rem; }
@@ -170,7 +183,7 @@ pre.sample {
 label.field { display: block; font-weight: 700; margin-bottom: 0.3rem; }
 textarea {
   width: 100%; min-height: 15rem; resize: vertical; padding: 0.7rem 0.8rem;
-  background: var(--surface); color: var(--ink); border: 1px solid var(--muted); border-radius: 3px;
+  background: var(--surface); color: var(--ink); border: 1px solid var(--muted); border-radius: var(--radius-control);
   font-family: var(--sans); font-size: 0.95rem; line-height: 1.5;
 }
 .hint { font-size: 0.88rem; color: var(--muted); margin: 0.25rem 0 0; }
@@ -178,19 +191,19 @@ textarea {
 .results { margin-top: 2rem; }
 .results h2 { margin-top: 1.6rem; }
 .chips { list-style: none; padding: 0; margin: 0.4rem 0 1rem; display: flex; flex-wrap: wrap; gap: 0.45rem; }
-.chips li { margin: 0; border: 1px solid var(--line); background: var(--surface); padding: 0.2rem 0.6rem; border-radius: 3px; font-size: 0.95rem; }
+.chips li { margin: 0; border: 1px solid var(--line); background: var(--surface); padding: 0.2rem 0.6rem; border-radius: var(--radius-control); font-size: 0.95rem; }
 .chips li small { color: var(--muted); }
-.chips.found li { border-left: 4px solid var(--ok); }
-.chips.partial li { border-left: 4px solid var(--warn); }
-.chips.missing li { border-left: 4px solid var(--bad); }
+.chips.found li { border-color: var(--ok); }
+.chips.partial li { border-color: var(--warn); }
+.chips.missing li { border-color: var(--bad); }
 .checks { list-style: none; padding: 0; margin: 0.6rem 0 1rem; }
 .checks li { border-top: 1px solid var(--line); padding: 0.6rem 0; margin: 0; display: grid; grid-template-columns: 4.8rem 1fr; gap: 0.2rem 0.8rem; }
-.checks .st { font-family: var(--mono); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; padding-top: 0.15rem; }
+.checks .st { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding-top: 0.15rem; }
 .checks .st.ok { color: var(--ok); }
 .checks .st.note { color: var(--warn); }
 .checks .st.warn { color: var(--bad); }
 .scoreline { font-family: var(--serif); font-size: 1.5rem; margin: 0.4rem 0; }
-.privacy-line { border: 1px dashed var(--muted); padding: 0.6rem 0.9rem; border-radius: 3px; font-size: 0.95rem; background: var(--surface); }
+.privacy-line { border: 1px dashed var(--muted); padding: 0.6rem 0.9rem; border-radius: var(--radius-box); font-size: 0.95rem; background: var(--surface); }
 
 /* Footer */
 .site-footer { border-top: 1px solid var(--line); margin-top: 3rem; padding: 1.8rem 0 2.4rem; font-size: 0.92rem; color: var(--muted); }
@@ -208,15 +221,15 @@ textarea {
 /* Struck-through "before" text, used in examples */
 .before { text-decoration: line-through; text-decoration-color: var(--accent); text-decoration-thickness: 2px; color: var(--muted); }
 
-code { font-family: var(--mono); font-size: 0.92em; overflow-wrap: anywhere; }
+code { font-weight: 600; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-control); padding: 0 0.3em; overflow-wrap: anywhere; }
 
-/* A sample letter reads better in the body face than in monospace */
-pre.sample.letter { font-family: var(--sans); font-size: 0.95rem; line-height: 1.6; }
+/* Sample text blocks use the body face; the site has two type families, serif and sans */
+pre.sample.letter { line-height: 1.6; }
 
 /* Cover letter check */
 input[type="text"] {
   width: 100%; padding: 0.6rem 0.8rem; background: var(--surface); color: var(--ink);
-  border: 1px solid var(--muted); border-radius: 3px; font-family: var(--sans); font-size: 0.95rem;
+  border: 1px solid var(--muted); border-radius: var(--radius-control); font-family: var(--sans); font-size: 0.95rem;
 }
 .checks details { border: 0; padding: 0.3rem 0 0; }
 .checks details:first-of-type { border-top: 0; }
@@ -230,4 +243,4 @@ input[type="text"] {
 .checks .st.na { color: var(--muted); }
 .bullet-card { border-top: 2px solid var(--ink); margin-top: 1.4rem; padding-top: 0.5rem; }
 .bullet-card .bullet-text { font-family: var(--serif); font-size: 1.15rem; margin: 0.3rem 0; }
-.bullet-card .score { font-family: var(--mono); font-size: 0.85rem; color: var(--muted); margin: 0 0 0.3rem; }
+.bullet-card .score { font-size: 0.85rem; font-weight: 600; color: var(--muted); margin: 0 0 0.3rem; }

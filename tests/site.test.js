@@ -167,11 +167,12 @@ test('the only external hosts are Stripe and the cited sources (Purdue, CareerOn
   assert.ok(!/@import|url\(\s*["']?https?:/.test(read(path.join(ROOT, 'assets', 'style.css'))));
 });
 
-test('the unpublished placeholder is gone, and the base URL appears only in canonical tags, sitemap.xml and robots.txt', () => {
+test('the unpublished placeholder is gone, and the base URL appears only in canonical tags, og:url, og:image, sitemap.xml and robots.txt', () => {
   for (const f of textFiles.filter((x) => !x.endsWith('.py'))) {
     let text = read(f);
     assert.ok(!text.includes(PLACEHOLDER), rel(f) + ' still has the placeholder');
     if (f.endsWith('.html')) text = text.replace(/<link rel="canonical" href="[^"]*">/g, '');
+    if (f.endsWith('.html')) text = text.replace(/<meta property="og:(?:url|image)" content="[^"]*">/g, ''); // absolute by the Open Graph rules
     if (['sitemap.xml', 'robots.txt'].includes(rel(f))) { assert.ok(text.includes(BASE), rel(f)); continue; }
     assert.ok(!text.includes(BASE), rel(f) + ' hard-codes the base URL outside canonical tags');
   }
@@ -494,4 +495,78 @@ test('the $25 interview prep offer is honest on the landing page and matches the
   assert.match(terms, /full refund/);
   assert.match(privacy, /cover letter, LinkedIn and interview prep options/);
   assert.match(home, /there are four paid options/);
+});
+
+// ---- design pass: head hygiene, icons, social image, first screen, style rules ----
+
+function pngSize(file) {
+  const b = fs.readFileSync(file);
+  assert.equal(b.subarray(0, 8).toString('hex'), '89504e470d0a1a0a', rel(file) + ' is not a PNG');
+  return [b.readUInt32BE(16), b.readUInt32BE(20)];
+}
+
+test('icons and social image exist with the right sizes, and every page points at them', () => {
+  assert.deepEqual(pngSize(path.join(ROOT, 'assets', 'social.png')), [1200, 630]);
+  assert.deepEqual(pngSize(path.join(ROOT, 'assets', 'apple-touch-icon.png')), [180, 180]);
+  assert.match(read(path.join(ROOT, 'assets', 'icon.svg')), /^<svg[^>]*viewBox="0 0 64 64"/);
+  for (const p of pages) {
+    assert.match(p.html, /<link rel="icon" [^>]*href="[^"]*assets\/icon\.svg"[^>]*type="image\/svg\+xml">/, p.name + ' icon');
+    assert.match(p.html, /<link rel="apple-touch-icon"[^>]*href="[^"]*assets\/apple-touch-icon\.png">/, p.name + ' apple-touch-icon');
+    if (p.name === '404.html') continue; // noindex page, never shared
+    assert.ok(p.html.includes('<meta property="og:image" content="' + BASE + '/assets/social.png">'), p.name + ' og:image');
+    assert.match(p.html, /<meta property="og:image:alt" content="[^"]{20,}">/, p.name + ' og:image:alt');
+    assert.match(p.html, /<meta property="og:image:width" content="1200">/, p.name);
+    assert.match(p.html, /<meta property="og:image:height" content="630">/, p.name);
+    assert.match(p.html, /<meta name="twitter:card" content="summary_large_image">/, p.name + ' twitter:card');
+    const canon = (p.html.match(/<link rel="canonical" href="([^"]+)">/) || [])[1];
+    assert.ok(p.html.includes('<meta property="og:url" content="' + canon + '">'), p.name + ' og:url');
+  }
+});
+
+test('meta descriptions are 70 to 160 characters and titles 30 to 65 on every page', () => {
+  for (const p of pages) {
+    const d = decode((p.html.match(/<meta name="description" content="([^"]*)"/) || [])[1] || '');
+    assert.ok(d.length >= 70 && d.length <= 160, p.name + ' description is ' + d.length);
+    const t = decode((p.html.match(/<title>([^<]*)<\/title>/) || [])[1] || '');
+    assert.ok(t.length >= 30 && t.length <= 65, p.name + ' title is ' + t.length + ': ' + t);
+  }
+});
+
+test('referrer and content security policy metas are present, and the policy allows no third party', () => {
+  for (const p of pages) {
+    assert.match(p.html, /<meta name="referrer" content="strict-origin-when-cross-origin">/, p.name);
+    assert.match(p.html, /<meta name="color-scheme" content="light dark">/, p.name);
+    if (p.name === '404.html') continue; // carries an inline style and script, so a strict policy would block it
+    const csp = (p.html.match(/<meta http-equiv="Content-Security-Policy" content="([^"]+)">/) || [])[1];
+    assert.ok(csp && csp.includes("default-src 'self'") && !/https?:|\*|unsafe/.test(csp), p.name + ' csp: ' + csp);
+    assert.ok(!/<style|\sstyle=|\sonclick=/.test(p.html), p.name + ' has inline style or handlers that the policy would block');
+    assert.ok(![...p.html.matchAll(/<script(?![^>]*(?:src=|application\/ld\+json))[^>]*>/g)].length, p.name + ' has an inline script');
+  }
+});
+
+test('stylesheet: no colored side bars, at most two font families, one radius token per role, no raw colors outside tokens', () => {
+  const css = read(path.join(ROOT, 'assets', 'style.css'));
+  assert.ok(!/border-left:\s*\d+px\s+solid/.test(css), 'a rule draws a side bar');
+  assert.ok(!/monospace|--mono/.test(css), 'a third (monospace) family came back');
+  const families = [...css.matchAll(/--(serif|sans):/g)].map((m) => m[1]);
+  assert.deepEqual(families.sort(), ['sans', 'serif']);
+  assert.ok(!/@font-face|fonts\.googleapis/.test(css), 'web fonts');
+  const radii = new Set([...css.matchAll(/border-radius:\s*([^;}]+)/g)].map((m) => m[1].trim()));
+  assert.deepEqual([...radii].sort(), ['var(--radius-box)', 'var(--radius-control)']);
+  const body = css.replace(/\/\*[\s\S]*?\*\//g, '').replace(/@media print[\s\S]*$/, '');
+  const outside = body.replace(/:root\s*\{[^}]*\}/g, '').replace(/@media \(prefers-color-scheme: dark\)\s*\{\s*\}/g, '');
+  assert.ok(!/#[0-9a-fA-F]{3,8}/.test(outside), 'raw hex color outside the token blocks');
+});
+
+test('home page first screen: one primary button, price, turnaround and refund before the long explanation', () => {
+  const html = read(path.join(ROOT, 'index.html'));
+  const hero = html.slice(html.indexOf('<section class="hero">'), html.indexOf('<h2>The free tools and guides</h2>'));
+  assert.equal((hero.match(/class="btn[ "]/g) || []).length, 1, 'exactly one button in the hero');
+  assert.match(hero, /href="ats-check\/index\.html">Check my resume for free<\/a>/);
+  for (const needle of ['$39', '48 hours', 'Full refund', 'sample pack', 'Example, invented'.slice(0, 0)]) assert.ok(hero.includes(needle), 'hero is missing: ' + needle);
+  assert.ok(hero.indexOf('$39') < html.indexOf('id="paid"'), 'price must come before the paid section');
+  assert.ok(!/<a class="btn[^>]*>Learn more|Submit/.test(html), 'vague button labels');
+  const nav = html.match(/<nav aria-label="Main">[\s\S]*?<\/nav>/)[0];
+  assert.ok(!/class="btn/.test(nav), 'the nav must not hold a second primary button');
+  assert.ok(html.includes('Example, invented for illustration'), 'the invented example is still labelled');
 });
