@@ -36,7 +36,7 @@ third-party files without changing it and the test that guards it.
   "Example, invented for illustration" tag. `tests/site.test.js` checks that the rewrite and letter add
   no number, name or claim absent from the invented inputs, and contain no brackets. If you change the
   sample, keep it that way. It is linked from the nav and footer of every page, the paid section and the guides index.
-- 17 guides in `guides/`, grouped by job stage on `guides/index.html`. Each shows an "Updated" date
+- 20 guides in `guides/`, grouped by job stage on `guides/index.html`. Each shows an "Updated" date
   in a `<p class="meta">` line, and the index card must show the same date (the link test checks it).
   When you edit a guide, change both dates and `lastmod` in `sitemap.xml`.
 - Adding a page: add it to the sitemap, to the guides index (if a guide), to the expected page list in

@@ -17,7 +17,7 @@ const STRIPE_LI = 'https://buy.stripe.com/3cI6oH7Nm79c6JC2eAg3602';
 const STRIPE_CL = 'https://buy.stripe.com/14AbJ1ffObpsd8006sg3603';
 const STRIPE_IP = 'https://buy.stripe.com/14A14nffO1OS3xq2eAg3604';
 const SOURCE_HOSTS = ['https://owl.purdue.edu/owl/job_search_writing/', 'https://www.careeronestop.org/', 'https://uvic.ca/career-services/',
-  'https://www.linkedin.com/help/', 'https://capd.mit.edu/', 'https://career.arizona.edu/'];
+  'https://www.linkedin.com/help/', 'https://capd.mit.edu/', 'https://career.arizona.edu/', 'https://careerservices.fas.harvard.edu/'];
 const ALLOWED_EXTERNAL = [STRIPE, STRIPE_LI, STRIPE_CL, STRIPE_IP, 'https://stripe.com/privacy', ...SOURCE_HOSTS, BASE];
 
 function walk(dir, out = []) {
@@ -51,7 +51,9 @@ test('the expected pages exist', () => {
   const names = pages.map((p) => p.name).sort();
   assert.deepEqual(names, [
     '404.html', 'ats-check/index.html', 'bullet-check/index.html', 'cover-letter-check/index.html',
-    'guides/achievement-bullets-from-duties.html', 'guides/career-change-resume-with-only-your-facts.html',
+    'guides/achievement-bullets-from-duties.html', 'guides/answer-behavioral-interview-questions-with-the-star-method.html',
+    'guides/informational-interview-how-to-ask-and-what-to-say.html', 'guides/what-to-leave-off-a-us-resume.html',
+    'guides/career-change-resume-with-only-your-facts.html',
     'guides/common-resume-mistakes.html', 'guides/cover-letter-structure.html',
     'guides/follow-up-after-applying-without-being-pushy.html', 'guides/how-many-bullets-per-job-on-a-resume.html',
     'guides/first-resume-with-no-work-experience-from-your-own-facts.html', 'guides/how-to-explain-a-short-job.html',
@@ -150,7 +152,7 @@ test('the $39 Stripe link is present exactly; only the three approved secondary 
   console.log('    Stripe link occurrences on index.html:', count);
 });
 
-test('the only external hosts are Stripe and the cited sources (Purdue, CareerOneStop, LinkedIn Help and three university career pages), all as plain links; nothing external is loaded', () => {
+test('the only external hosts are Stripe and the cited sources (Purdue, CareerOneStop, LinkedIn Help and four university career pages), all as plain links; nothing external is loaded', () => {
   for (const f of textFiles.filter((x) => !x.endsWith('.py'))) {
     const text = read(f);
     for (const m of text.matchAll(/https?:\/\/[^\s"'<>)]+/g)) {
@@ -321,15 +323,16 @@ test('FAQ JSON-LD matches the visible FAQ word for word; Service JSON-LD matches
   console.log('    FAQ entries matched:', details.length);
 });
 
-test('guides: 17 pages with word counts in range, a hub link, an updated date and sources only from the approved hosts', () => {
+test('guides: 20 pages with word counts in range, a hub link, an updated date and sources only from the approved hosts', () => {
   const guides = pages.filter((p) => /^guides\/(?!index)/.test(p.name));
-  assert.equal(guides.length, 17);
+  assert.equal(guides.length, 20);
   const second = ['resume-summary-vs-objective-for-students', 'how-many-bullets-per-job-on-a-resume', 'career-change-resume-with-only-your-facts',
     'projects-and-coursework-on-a-resume', 'reference-and-employment-gap-questions-answered-honestly', 'follow-up-after-applying-without-being-pushy'];
   const third = ['resume-file-name-and-format-pdf-or-word', 'first-resume-with-no-work-experience-from-your-own-facts', 'linkedin-headline-and-about-section-structure',
-    'how-to-read-a-job-posting-for-what-matters', 'interview-thank-you-note-structure', 'how-to-explain-a-short-job'];
+    'how-to-read-a-job-posting-for-what-matters', 'interview-thank-you-note-structure', 'how-to-explain-a-short-job',
+    'answer-behavioral-interview-questions-with-the-star-method', 'informational-interview-how-to-ask-and-what-to-say', 'what-to-leave-off-a-us-resume'];
   const is = (list, g) => list.some((a) => g.name === 'guides/' + a + '.html');
-  assert.equal(guides.filter((g) => is(third, g)).length, 6);
+  assert.equal(guides.filter((g) => is(third, g)).length, 9);
   for (const g of guides) {
     const article = g.html.match(/<article[\s\S]*?<\/article>/)[0];
     const words = visibleText(article).split(' ').length;
